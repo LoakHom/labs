@@ -1,0 +1,101 @@
+ЛАБОРАТОРНАЯ РАБОТА №6
+«Метапрограммирование»
+Выполнил: Почкалов Марк Станиславович
+Группа: Б-ПИ(ПИ-1)-23/1
+
+1. ЦЕЛЬ РАБОТЫ
+Изучить основы метапрограммирования в Python
+Получить навыки работы с функцией type() и метаклассами
+Реализовать собственный метакласс для контроля структуры класса
+
+2. ХОД РАБОТЫ
+2.1. Подготовка рабочей среды
+Установлен Python версии 3.8+
+Использована IDE: Visual Studio Code
+Инициализирован Git-репозиторий:
+
+bash
+git init lab6_metaprogramming
+cd lab6_metaprogramming
+code .
+Создана структура проекта:
+
+bash
+mkdir src tests
+touch src/__init__.py tests/__init__.py
+Установлены зависимости:
+bash
+pip install pytest mypy
+2.2. Выполнение задания
+Создать метакласс RequiredAttributesMeta, который гарантирует наличие в создаваемом классе определённых атрибутов.
+Пример использования: при создании класса User должны быть определены атрибуты name, email.
+
+3. КОД ПРОГРАММЫ
+python
+# src/metaclass_check.py
+class RequiredAttributesMeta(type):
+    def __new__(cls, name, bases, attrs):
+        required_attrs = attrs.get('__required__', [])
+        for attr in required_attrs:
+            if attr not in attrs:
+                raise TypeError(f"Missing required attribute: {attr}")
+        return super().__new__(cls, name, bases, attrs)
+
+class User(metaclass=RequiredAttributesMeta):
+    __required__ = ['name', 'email']
+    name = "Default Name"
+    email = "default@example.com"
+4. ТЕСТОВЫЕ СЛУЧАИ
+python
+# tests/test_metaclass_check.py
+import pytest
+from src.metaclass_check import User
+
+def test_user_attributes():
+    user = User()
+    assert user.name == "Default Name"
+    assert user.email == "default@example.com"
+
+def test_missing_attribute():
+    with pytest.raises(TypeError):
+        class InvalidUser(metaclass=User.__class__):
+            __required__ = ['name', 'email']
+            name = "No email"
+Проверка типов:
+bash
+mypy src/metaclass_check.py
+# Ожидаемый результат: Success: no issues found
+5. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ
+ 
+Класс User корректно создаётся
+Отсутствие обязательного атрибута вызывает исключение
+Все тесты успешно пройдены
+
+6. ВЫВОДЫ
+- В ходе лабораторной работы:
+- Изучен механизм метаклассов и функции type()
+- Реализован метакласс для валидации атрибутов
+- Получен практический опыт метапрограммирования в Python
+- Метаподход доказал свою полезность в контроле архитектуры классов
+
+7. ИНСТРУКЦИЯ ПО ПУБЛИКАЦИИ НА GITFLIC
+bash
+# Инициализация репозитория
+git init
+git add .
+git commit -m "Initial commit"
+
+# Создание репозитория на GitFlic:
+# 1. Зарегистрироваться на https://gitflic.ru
+# 2. Создать новый проект через веб-интерфейс
+
+# Добавление удаленного репозитория
+git remote add origin https://gitflic.ru/project/username/repository.git
+
+# Отправка кода
+git push -u origin master
+
+# Публикация документации:
+# 1. Создать директорию docs
+# 2. Разместить отчёт в формате PDF
+# 3. Загрузить документацию через GitFlic Pages
