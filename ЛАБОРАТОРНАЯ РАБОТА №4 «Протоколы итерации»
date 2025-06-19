@@ -1,0 +1,99 @@
+ЛАБОРАТОРНАЯ РАБОТА №4
+«Протоколы итерации»
+Выполнил: Почкалов Марк Станиславович
+Группа: Б-ПИ(ПИ-1)-23/1
+
+1. ЦЕЛЬ РАБОТЫ
+Изучить протоколы итерации в Python: __iter__() и __next__()
+Реализовать пользовательский итерируемый объект
+Получить практический опыт работы с итераторами и итерабельными объектами
+
+2. ХОД РАБОТЫ
+2.1. Подготовка рабочей среды
+Установлен Python 3.8+
+Использована IDE: Visual Studio Code
+Инициализирован Git-репозиторий:
+bash
+git init lab4_iterator_protocols
+cd lab4_iterator_protocols
+code .
+Создана структура проекта:
+bash
+mkdir src tests
+touch src/__init__.py tests/__init__.py
+Установлены зависимости:
+bash
+pip install pytest mypy
+2.2. Выполнение задания
+Создать итерируемый класс RangeSquares, который возвращает квадраты чисел в заданном диапазоне от start до end.
+Использовать методы __iter__() и __next__().
+
+3. КОД ПРОГРАММЫ
+python
+# src/range_squares.py
+class RangeSquares:
+    def __init__(self, start: int, end: int):
+        self.start = start
+        self.end = end
+        self.current = start
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current > self.end:
+            raise StopIteration
+        result = self.current ** 2
+        self.current += 1
+        return result
+4. ТЕСТОВЫЕ СЛУЧАИ
+python
+# tests/test_range_squares.py
+from src.range_squares import RangeSquares
+
+def test_range_squares():
+    rs = RangeSquares(1, 5)
+    assert list(rs) == [1, 4, 9, 16, 25]
+
+def test_empty_range():
+    rs = RangeSquares(3, 2)
+    assert list(rs) == []
+Проверка типов:
+bash
+mypy src/range_squares.py
+# Ожидаемый результат: Success: no issues found
+5. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ
+ 
+Итератор работает корректно
+Генерирует квадрат чисел в заданном диапазоне
+Протестированы нормальный и граничный случаи
+
+6. ВЫВОДЫ
+В ходе лабораторной работы:
+Освоены методы __iter__() и __next__()
+Создан пользовательский итерируемый объект
+Получены знания о внутреннем устройстве итераций в Python
+Подтверждена работа протокола итерации при помощи unit-тестов
+
+7. ИНСТРУКЦИЯ ПО ПУБЛИКАЦИИ НА GITFLIC
+bash
+# Инициализация репозитория
+git init
+git add .
+git commit -m "Initial commit"
+
+# Создание репозитория на GitFlic:
+# 1. Зарегистрироваться на https://gitflic.ru
+# 2. Создать новый проект через веб-интерфейс
+
+# Добавление удаленного репозитория
+git remote add origin https://gitflic.ru/project/username/repository.git
+
+# Отправка кода
+git push -u origin master
+
+# Публикация документации:
+# 1. Создать директорию docs
+# 2. Разместить отчёт в формате PDF
+# 3. Загрузить документацию через GitFlic Pages
+ 
