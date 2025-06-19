@@ -1,0 +1,133 @@
+ЛАБОРАТОРНАЯ РАБОТА №7
+«Контейнеры»
+Выполнил: Почкалов Марк Станиславович
+Группа: Б-ПИ(ПИ-1)-23/1
+
+1. ЦЕЛЬ РАБОТЫ
+- Изучить протоколы контейнерных типов (__len__, __getitem__, __setitem__, __contains__)
+- Освоить создание собственных классов-контейнеров
+- Реализовать пользовательскую коллекцию, совместимую с основными операциями Python
+
+2. ХОД РАБОТЫ
+2.1. Подготовка рабочей среды
+Установлен Python 3.8+
+Использована IDE: Visual Studio Code
+Инициализирован Git-репозиторий:
+bash
+git init lab7_containers
+cd lab7_containers
+code .
+Создана структура проекта:
+bash
+mkdir src tests
+touch src/__init__.py tests/__init__.py
+Установлены зависимости:
+bash
+pip install pytest mypy
+2.2. Выполнение задания
+Реализовать класс IntegerList, хранящий только целые числа.
+Класс должен поддерживать:
+Индексацию (obj[i])
+Присваивание по индексу
+Проверку длины (len(obj))
+Проверку на вхождение (x in obj)
+Итерацию по элементам
+
+3. КОД ПРОГРАММЫ
+python
+# src/integer_list.py
+class IntegerList:
+    def __init__(self, values=None):
+        self._data = []
+        if values:
+            for value in values:
+                self._validate(value)
+                self._data.append(value)
+
+    def _validate(self, value):
+        if not isinstance(value, int):
+            raise TypeError("Only integers are allowed")
+
+    def __getitem__(self, index):
+        return self._data[index]
+
+    def __setitem__(self, index, value):
+        self._validate(value)
+        self._data[index] = value
+
+    def __len__(self):
+        return len(self._data)
+
+    def __contains__(self, item):
+        return item in self._data
+
+    def __iter__(self):
+        return iter(self._data)
+4. ТЕСТОВЫЕ СЛУЧАИ
+python
+# tests/test_integer_list.py
+import pytest
+from src.integer_list import IntegerList
+
+def test_initialization():
+    lst = IntegerList([1, 2, 3])
+    assert len(lst) == 3
+
+def test_indexing_and_assignment():
+    lst = IntegerList([5])
+    assert lst[0] == 5
+    lst[0] = 10
+    assert lst[0] == 10
+
+def test_type_validation():
+    with pytest.raises(TypeError):
+        IntegerList(["a", 2])
+
+def test_contains():
+    lst = IntegerList([1, 2, 3])
+    assert 2 in lst
+    assert 5 not in lst
+
+def test_iteration():
+    lst = IntegerList([4, 5, 6])
+    result = [x for x in lst]
+    assert result == [4, 5, 6]
+Проверка типов:
+bash
+mypy src/integer_list.py
+# Ожидаемый результат: Success: no issues found
+5. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ
+ 
+Все базовые операции контейнеров работают корректно
+Ошибки при недопустимых значениях корректно обрабатываются
+Тесты проходят успешно
+
+6. ВЫВОДЫ
+В результате выполнения лабораторной работы:
+Освоены принципы реализации пользовательских контейнеров
+Изучены методы __getitem__, __setitem__, __len__, __contains__, __iter__
+Реализован контейнер с встроенной валидацией
+Получен опыт написания тестов для проверки поведения коллекции
+
+7. ИНСТРУКЦИЯ ПО ПУБЛИКАЦИИ НА GITFLIC
+bash
+# Инициализация репозитория
+git init
+git add .
+git commit -m "Initial commit"
+
+# Создание репозитория на GitFlic:
+# 1. Зарегистрироваться на https://gitflic.ru
+# 2. Создать новый проект через веб-интерфейс
+
+# Добавление удаленного репозитория
+git remote add origin https://gitflic.ru/project/username/repository.git
+
+# Отправка кода
+git push -u origin master
+
+# Публикация документации:
+# 1. Создать директорию docs
+# 2. Разместить отчёт в формате PDF
+# 3. Загрузить документацию через GitFlic Pages
+
