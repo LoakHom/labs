@@ -1,0 +1,90 @@
+«Строковое представление объектов»
+Выполнил: Почкалов Марк Станиславович
+Группа: Б-ПИ(ПИ-1)-23/1
+
+1. ЦЕЛЬ РАБОТЫ
+- Изучить методы __str__ и __repr__ в Python
+- Освоить принципы переопределения строкового представления объектов
+- Научиться использовать строковое представление для отладки и логирования
+
+2. ХОД РАБОТЫ
+2.1. Подготовка рабочей среды
+- Установлен Python версии 3.8+
+- Использована IDE: Visual Studio Code
+- Инициализирован Git-репозиторий:
+bash
+git init lab2_str_repr
+cd lab2_str_repr
+code .
+Создана структура проекта:
+bash
+mkdir src tests
+touch src/__init__.py tests/__init__.py
+Установлены зависимости:
+bash
+pip install pytest mypy
+2.2. Выполнение задания
+Создан класс Person с переопределением методов __str__ и __repr__.
+Методы должны возвращать разные представления объекта для пользователя и разработчика соответственно.
+3. КОД ПРОГРАММЫ
+python
+# src/person.py
+class Person:
+    def __init__(self, name: str, age: int):
+        self.name = name
+        self.age = age
+
+    def __str__(self):
+        return f"{self.name}, {self.age} лет"
+
+    def __repr__(self):
+        return f"Person(name='{self.name}', age={self.age})"
+4. ТЕСТОВЫЕ СЛУЧАИ
+python
+# tests/test_person.py
+from src.person import Person
+
+def test_str():
+    p = Person("Марк", 21)
+    assert str(p) == "Марк, 21 лет"
+
+def test_repr():
+    p = Person("Марк", 21)
+    assert repr(p) == "Person(name='Марк', age=21)"
+Проверка типов:
+bash
+mypy src/person.py
+# Ожидаемый вывод: Success: no issues found
+5. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ
+ Методы __str__ и __repr__ работают корректно
+Все тесты успешно пройдены
+
+6. ВЫВОДЫ
+В ходе выполнения лабораторной работы:
+- Изучены отличия между методами __str__ и __repr__
+- Реализованы оба метода для пользовательского класса
+- Проведено тестирование и проверка корректности возвращаемых строк
+- Получен опыт использования строкового представления для отладки
+
+7. ИНСТРУКЦИЯ ПО ПУБЛИКАЦИИ НА GITFLIC
+bash
+# Инициализация репозитория
+git init
+git add .
+git commit -m "Initial commit"
+
+# Создание репозитория на GitFlic:
+# 1. Зарегистрироваться на https://gitflic.ru
+# 2. Создать новый проект через веб-интерфейс
+
+# Добавление удаленного репозитория
+git remote add origin https://gitflic.ru/project/username/repository.git
+
+# Отправка кода
+git push -u origin master
+
+# Публикация документации:
+# 1. Создать директорию docs
+# 2. Разместить отчёт в формате PDF
+# 3. Загрузить документацию через GitFlic Pages
+ 
