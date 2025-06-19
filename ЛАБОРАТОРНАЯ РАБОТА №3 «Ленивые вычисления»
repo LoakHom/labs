@@ -1,0 +1,98 @@
+ЛАБОРАТОРНАЯ РАБОТА №3
+«Ленивые вычисления»
+Выполнил: Почкалов Марк Станиславович
+Группа: Б-ПИ(ПИ-1)-23/1
+
+1. ЦЕЛЬ РАБОТЫ
+- Изучить механизм ленивых вычислений в Python
+- Научиться использовать генераторы и итераторы
+- Реализовать пользовательскую функцию-генератор с отложенным вычислением значений
+
+2. ХОД РАБОТЫ
+2.1. Подготовка рабочей среды
+Установлен Python версии 3.8+
+Использована IDE: Visual Studio Code
+Инициализирован Git-репозиторий:
+bash
+git init lab3_lazy
+cd lab3_lazy
+code .
+Создана структура проекта:
+bash
+mkdir src tests
+touch src/__init__.py tests/__init__.py
+Установлены зависимости:
+bash
+pip install pytest mypy
+2.2. Выполнение задания
+Создать генератор, который реализует бесконечную последовательность квадратов натуральных чисел.
+Дополнительно — создать ленивую функцию фильтрации этой последовательности, отбирающую только чётные квадраты.
+
+3. КОД ПРОГРАММЫ
+python
+# src/lazy_square.py
+from typing import Generator
+
+def square_generator() -> Generator[int, None, None]:
+    n = 1
+    while True:
+        yield n * n
+        n += 1
+
+def even_filter(gen: Generator[int, None, None]) -> Generator[int, None, None]:
+    for value in gen:
+        if value % 2 == 0:
+            yield value
+4. ТЕСТОВЫЕ СЛУЧАИ
+python
+# tests/test_lazy_square.py
+from src.lazy_square import square_generator, even_filter
+import itertools
+
+def test_first_5_squares():
+    gen = square_generator()
+    squares = list(itertools.islice(gen, 5))
+    assert squares == [1, 4, 9, 16, 25]
+
+def test_even_filter():
+    gen = square_generator()
+    even_gen = even_filter(gen)
+    evens = list(itertools.islice(even_gen, 3))
+    assert evens == [4, 16, 36]
+Проверка типов:
+bash
+mypy src/lazy_square.py
+# Ожидаемый вывод: Success: no issues found
+5. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ
+ Генераторы корректно создают значения по требованию
+Все тесты успешно пройдены
+Функция ленивой фильтрации работает корректно
+
+6. ВЫВОДЫ
+- В процессе выполнения лабораторной работы:
+- Освоены основы ленивых вычислений в Python
+- Реализованы генераторы для создания и фильтрации последовательностей
+- Получен опыт работы с бесконечными итерациями
+- Подтверждена эффективность подхода при больших объёмах данных
+
+7. ИНСТРУКЦИЯ ПО ПУБЛИКАЦИИ НА GITFLIC
+bash
+# Инициализация репозитория
+git init
+git add .
+git commit -m "Initial commit"
+
+# Создание репозитория на GitFlic:
+# 1. Зарегистрироваться на https://gitflic.ru
+# 2. Создать новый проект через веб-интерфейс
+
+# Добавление удаленного репозитория
+git remote add origin https://gitflic.ru/project/username/repository.git
+
+# Отправка кода
+git push -u origin master
+
+# Публикация документации:
+# 1. Создать директорию docs
+# 2. Разместить отчёт в формате PDF
+# 3. Загрузить документацию через GitFlic Pages 
