@@ -1,0 +1,108 @@
+«Работа с абстрактными базовыми классами»
+Выполнил: Почкалов Марк Станиславович
+Группа: Б-ПИ(ПИ-1)-23/1
+
+1. ЦЕЛЬ РАБОТЫ
+- Освоение принципов работы с абстрактными базовыми классами в Python
+- Изучение создания иерархий классов с использованием модуля abc
+
+2. ХОД РАБОТЫ
+2.1. Подготовка рабочей среды
+- Установлен Python версии 3.8+
+- Использована IDE: Visual Studio Code
+- Инициализирован Git-репозиторий:
+bash
+git init lab1_abc
+cd lab1_abc
+code .
+
+- Создана структура проекта:
+bash
+mkdir src tests
+touch src/__init__.py tests/__init__.py
+
+- Установлены зависимости:
+bash
+pip install pytest mypy
+
+2.2. Выполнение задания
+Создана иерархия транспортных средств:
+- Абстрактный базовый класс Vehicle
+- Реализации: Car, Truck
+- Определён абстрактный метод start
+
+3. КОД ПРОГРАММЫ
+python
+# src/vehicles.py
+from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    @abstractmethod
+    def start(self):
+        pass
+
+class Car(Vehicle):
+    def start(self):
+        print("Car engine started")
+
+class Truck(Vehicle):
+    def start(self):
+        print("Truck engine started")
+
+4. ТЕСТОВЫЕ СЛУЧАИ
+python
+# tests/test_vehicles.py
+from src.vehicles import Car, Truck
+
+def test_car_start(capsys):
+    car = Car()
+    car.start()
+    captured = capsys.readouterr()
+    assert captured.out.strip() == "Car engine started"
+
+def test_truck_start(capsys):
+    truck = Truck()
+    truck.start()
+    captured = capsys.readouterr()
+    assert captured.out.strip() == "Truck engine started"
+Проверка типов:
+
+bash
+mypy src/vehicles.py
+# Ожидаемый вывод: Success: no issues found
+
+5. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ
+ Все тесты успешно пройдены
+Ошибок типов не обнаружено
+
+6. ВЫВОДЫ
+В результате выполнения лабораторной работы:
+- Изучен модуль abc и применение аннотации @abstractmethod
+- Созданы конкретные классы на основе абстрактного
+- Проведено тестирование с использованием pytest
+- Получен практический опыт работы с абстрактными базовыми классами
+
+7. ИНСТРУКЦИЯ ПО ПУБЛИКАЦИИ НА GITFLIC
+bash
+Копировать
+Редактировать
+# Инициализация репозитория
+git init
+git add .
+git commit -m "Initial commit"
+
+# Создание репозитория на GitFlic:
+# 1. Зарегистрироваться на https://gitflic.ru
+# 2. Создать новый проект через веб-интерфейс
+
+# Добавление удаленного репозитория
+git remote add origin https://gitflic.ru/project/username/repository.git
+
+# Отправка кода
+git push -u origin master
+
+# Публикация документации:
+# 1. Создать директорию docs
+# 2. Разместить отчёт в формате PDF
+# 3. Загрузить документацию через GitFlic Pages
+ 
