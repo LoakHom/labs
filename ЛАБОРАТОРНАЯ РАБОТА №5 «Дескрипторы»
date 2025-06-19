@@ -1,0 +1,107 @@
+ЛАБОРАТОРНАЯ РАБОТА №5
+«Дескрипторы»
+Выполнил: Почкалов Марк Станиславович
+Группа: Б-ПИ(ПИ-1)-23/1
+
+1. ЦЕЛЬ РАБОТЫ
+- Изучить принцип работы дескрипторов в Python
+- Реализовать собственный дескриптор
+- Освоить применение дескрипторов для контроля доступа и валидации данных
+
+2. ХОД РАБОТЫ
+2.1. Подготовка рабочей среды
+Установлен Python версии 3.8+
+Использована IDE: Visual Studio Code
+Инициализирован Git-репозиторий:
+bash
+git init lab5_descriptors
+cd lab5_descriptors
+code .
+Создана структура проекта:
+bash
+mkdir src tests
+touch src/__init__.py tests/__init__.py
+Установлены зависимости:
+bash
+pip install pytest mypy
+2.2. Выполнение задания
+Реализовать дескриптор PositiveInteger, который разрешает устанавливать только положительные целые числа. Использовать его в классе Product, где price и quantity должны быть валидированы через дескриптор.
+
+3. КОД ПРОГРАММЫ
+python
+# src/descriptors.py
+class PositiveInteger:
+    def __set_name__(self, owner, name):
+        self.private_name = "_" + name
+
+    def __get__(self, instance, owner):
+        return getattr(instance, self.private_name)
+
+    def __set__(self, instance, value):
+        if not isinstance(value, int) or value <= 0:
+            raise ValueError(f"{self.private_name[1:]} must be a positive integer")
+        setattr(instance, self.private_name, value)
+
+class Product:
+    price = PositiveInteger()
+    quantity = PositiveInteger()
+
+    def __init__(self, price: int, quantity: int):
+        self.price = price
+        self.quantity = quantity
+4. ТЕСТОВЫЕ СЛУЧАИ
+python
+# tests/test_descriptors.py
+import pytest
+from src.descriptors import Product
+
+def test_valid_product():
+    p = Product(price=100, quantity=5)
+    assert p.price == 100
+    assert p.quantity == 5
+
+def test_invalid_price():
+    with pytest.raises(ValueError):
+        Product(price=-10, quantity=5)
+
+def test_invalid_quantity():
+    with pytest.raises(ValueError):
+        Product(price=100, quantity=0)
+Проверка типов:
+bash
+mypy src/descriptors.py
+# Ожидаемый результат: Success: no issues found
+5. РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ
+ 
+Корректные значения успешно присваиваются
+При попытке задать некорректное значение выбрасывается исключение
+Все тесты проходят успешно
+
+6. ВЫВОДЫ
+- В результате выполнения лабораторной работы:
+- Изучена архитектура дескрипторов в Python
+- Реализован собственный дескриптор с валидацией
+- Получен практический опыт применения дескрипторов в прикладных задачах
+- Подтверждена их применимость для инкапсуляции логики проверки значений
+
+7. ИНСТРУКЦИЯ ПО ПУБЛИКАЦИИ НА GITFLIC
+bash
+# Инициализация репозитория
+git init
+git add .
+git commit -m "Initial commit"
+
+# Создание репозитория на GitFlic:
+# 1. Зарегистрироваться на https://gitflic.ru
+# 2. Создать новый проект через веб-интерфейс
+
+# Добавление удаленного репозитория
+git remote add origin https://gitflic.ru/project/username/repository.git
+
+# Отправка кода
+git push -u origin master
+
+# Публикация документации:
+# 1. Создать директорию docs
+# 2. Разместить отчёт в формате PDF
+# 3. Загрузить документацию через GitFlic Pages 
